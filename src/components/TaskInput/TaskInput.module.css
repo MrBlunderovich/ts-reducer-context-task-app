@@ -1,0 +1,15 @@
+.task-input {
+  & form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  & input {
+    padding-inline: 0.3rem;
+  }
+
+  & button {
+    padding-inline: 1rem;
+  }
+}
