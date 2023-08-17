@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 
-type Task = {
+export type Task = {
   id: number;
   text: string;
   isCompleted: boolean;
@@ -16,7 +16,9 @@ type Props = {
   children: React.ReactNode;
 };
 type TaskState = typeof initialState;
-type Action = { type: "ADD_TASK"; payload: { text: string } };
+type Action =
+  | { type: "ADD_TASK"; payload: { text: string } }
+  | { type: "EDIT_TASK"; payload: { text: string; id: number } };
 
 export default function TaskProvider({ children }: Props) {
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
@@ -50,7 +52,14 @@ function taskReducer(state: TaskState, action: Action) {
     case "ADD_TASK":
       return [...state, createTask(action.payload.text)];
 
+    case "EDIT_TASK":
+      return state.map((task) =>
+        task.id === action.payload.id
+          ? { ...task, text: action.payload.text }
+          : task
+      );
+
     default:
-      throw `Unexpected action ${action.type}`;
+      throw new Error("Unexpected action");
   }
 }
