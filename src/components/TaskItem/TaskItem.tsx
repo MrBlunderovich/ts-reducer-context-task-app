@@ -8,7 +8,7 @@ export default function TaskItem({ task }: TaskItemProps) {
   const [text, setText] = useState(task.text);
   const dispatch = useTaskDispatch();
 
-  function handleBlur(event: React.FocusEvent<HTMLInputElement, Element>) {
+  function handleEdit(event: React.FocusEvent<HTMLInputElement, Element>) {
     dispatch({
       type: "EDIT_TASK",
       payload: { text: event.target.value, id: task.id },
@@ -22,8 +22,15 @@ export default function TaskItem({ task }: TaskItemProps) {
     });
   }
 
+  function handleDelete() {
+    dispatch({
+      type: "DELETE_TASK",
+      payload: { id: task.id },
+    });
+  }
+
   return (
-    <li>
+    <li className={styles["task-item"]}>
       <input
         type="checkbox"
         name="completeCheckbox"
@@ -32,10 +39,11 @@ export default function TaskItem({ task }: TaskItemProps) {
       />
       <input
         type="text"
-        onBlur={handleBlur}
+        onBlur={handleEdit}
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
+      <button onClick={handleDelete}>X</button>
     </li>
   );
 }
