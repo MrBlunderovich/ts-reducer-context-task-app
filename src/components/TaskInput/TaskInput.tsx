@@ -1,5 +1,6 @@
 import { useTaskDispatch } from "../../context/TaskProvider";
 import styles from "./TaskInput.module.css";
+import { nanoid } from "nanoid";
 
 export default function TaskInput() {
   const dispatch = useTaskDispatch();
@@ -8,7 +9,10 @@ export default function TaskInput() {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const input = form.taskTextInput as HTMLFormElement;
-    dispatch({ type: "ADD_TASK", payload: { text: input.value } });
+    dispatch({
+      type: "ADD_TASK",
+      payload: { text: input.value, id: nanoid() },
+    });
     input.value = "";
     input.focus();
   }

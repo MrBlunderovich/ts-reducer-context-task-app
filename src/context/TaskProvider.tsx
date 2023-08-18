@@ -1,13 +1,12 @@
 import { createContext, useContext, useReducer } from "react";
 
 export type Task = {
-  id: number;
+  id: string;
   text: string;
   isCompleted: boolean;
 };
 
 const initialState: Task[] = [];
-let nextId = 0;
 const defaultDispatch: React.Dispatch<Action> = () => initialState;
 const TaskStateContext = createContext(initialState);
 const TaskDispatchContext = createContext(defaultDispatch);
@@ -17,8 +16,8 @@ type Props = {
 };
 type TaskState = typeof initialState;
 type Action =
-  | { type: "ADD_TASK"; payload: { text: string } }
-  | { type: "EDIT_TASK"; payload: { text: string; id: number } };
+  | { type: "ADD_TASK"; payload: { text: string; id: string } }
+  | { type: "EDIT_TASK"; payload: { text: string; id: string } };
 
 export default function TaskProvider({ children }: Props) {
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
@@ -42,15 +41,15 @@ export function useTaskDispatch() {
   return useContext(TaskDispatchContext);
 }
 
-function createTask(text: string): Task {
-  return { id: nextId++, text, isCompleted: false };
+function createTask(id: string, text: string): Task {
+  return { id, text, isCompleted: false };
 }
 
 function taskReducer(state: TaskState, action: Action) {
   console.log(action);
   switch (action.type) {
     case "ADD_TASK":
-      return [...state, createTask(action.payload.text)];
+      return [...state, createTask(action.payload.id, action.payload.text)];
 
     case "EDIT_TASK":
       return state.map((task) =>
