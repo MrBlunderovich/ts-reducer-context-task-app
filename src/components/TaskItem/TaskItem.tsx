@@ -32,6 +32,7 @@ export default function TaskItem({ task }: TaskItemProps) {
   return (
     <li className={styles["task-item"]}>
       <input
+        className="material-icons-outlined"
         type="checkbox"
         name="completeCheckbox"
         onChange={handleComplete}
@@ -42,8 +43,14 @@ export default function TaskItem({ task }: TaskItemProps) {
         onBlur={handleEdit}
         value={text}
         onChange={(e) => setText(e.target.value)}
+        autoComplete="off"
       />
-      <button onClick={handleDelete}>X</button>
+      <button
+        className="material-icons-outlined icon-button"
+        onClick={handleDelete}
+      >
+        highlight_off
+      </button>
     </li>
   );
 }

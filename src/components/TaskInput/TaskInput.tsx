@@ -34,7 +34,9 @@ export default function TaskInput() {
           autoComplete="off"
           required
         />
-        <button>+</button>
+        <button className="material-icons-outlined icon-button">
+          add_circle_outline
+        </button>
       </form>
     </div>
   );

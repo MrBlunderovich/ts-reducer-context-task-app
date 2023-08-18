@@ -2,8 +2,29 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  padding: 0.2rem 1rem;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+
+  &:focus-within {
+    border-top: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+  }
 
   & button {
-    padding-inline: 1rem;
+    font-size: 1.5rem;
+    color: var(--accent-secondary);
+  }
+
+  & input[type="checkbox"] {
+    appearance: none;
+    cursor: pointer;
+
+    &:checked::after {
+      content: "check_box";
+    }
+    &:not(checked)::after {
+      content: "check_box_outline_blank";
+    }
   }
 }
