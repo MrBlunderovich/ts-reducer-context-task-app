@@ -51,7 +51,7 @@ function taskReducer(state: TaskState, action: Action) {
   console.log(action);
   switch (action.type) {
     case "ADD_TASK":
-      return [...state, createTask(action.payload.id, action.payload.text)];
+      return [createTask(action.payload.id, action.payload.text), ...state];
 
     case "EDIT_TASK":
       return state.map((task) =>
