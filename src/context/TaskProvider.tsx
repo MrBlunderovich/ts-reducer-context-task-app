@@ -17,7 +17,8 @@ type Props = {
 type TaskState = typeof initialState;
 type Action =
   | { type: "ADD_TASK"; payload: { text: string; id: string } }
-  | { type: "EDIT_TASK"; payload: { text: string; id: string } };
+  | { type: "EDIT_TASK"; payload: { text: string; id: string } }
+  | { type: "COMPLETE_TASK"; payload: { isCompleted: boolean; id: string } };
 
 export default function TaskProvider({ children }: Props) {
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
@@ -57,6 +58,15 @@ function taskReducer(state: TaskState, action: Action) {
           ? { ...task, text: action.payload.text }
           : task
       );
+
+    case "COMPLETE_TASK":
+      const newState = state.map((task) =>
+        task.id === action.payload.id
+          ? { ...task, isCompleted: action.payload.isCompleted }
+          : task
+      );
+      newState.sort((a, b) => +a.isCompleted - +b.isCompleted);
+      return newState;
 
     default:
       throw new Error("Unexpected action");
