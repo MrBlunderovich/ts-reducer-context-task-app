@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 export type Task = {
   id: string;
@@ -16,6 +16,7 @@ type Props = {
 };
 type TaskState = typeof initialState;
 type Action =
+  | { type: "LOAD_TASKS"; payload: { tasks: Task[] } }
   | { type: "ADD_TASK"; payload: { text: string; id: string } }
   | { type: "EDIT_TASK"; payload: { text: string; id: string } }
   | { type: "COMPLETE_TASK"; payload: { isCompleted: boolean; id: string } }
@@ -25,6 +26,20 @@ export default function TaskProvider({ children }: Props) {
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
 
   console.log(tasks);
+
+  useEffect(() => {
+    const storage = localStorage.getItem("tasks");
+    if (storage) {
+      const savedTasks: Task[] = JSON.parse(storage);
+      if (savedTasks.length > 0) {
+        dispatch({ type: "LOAD_TASKS", payload: { tasks: savedTasks } });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <TaskStateContext.Provider value={tasks}>
@@ -50,6 +65,9 @@ function createTask(id: string, text: string): Task {
 function taskReducer(state: TaskState, action: Action) {
   console.log(action);
   switch (action.type) {
+    case "LOAD_TASKS":
+      return [...action.payload.tasks];
+
     case "ADD_TASK":
       return [createTask(action.payload.id, action.payload.text), ...state];
 
